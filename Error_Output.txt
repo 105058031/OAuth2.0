@@ -1,0 +1,243 @@
+ssl.SSLEOFError
+SSLEOFError: EOF occurred in violation of protocol (_ssl.c:661)
+
+Traceback (most recent call last)
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 2309, in __call__
+ 
+    def __call__(self, environ, start_response):
+        """The WSGI server calls the Flask application object as the
+        WSGI application. This calls :meth:`wsgi_app` which can be
+        wrapped to applying middleware."""
+        return self.wsgi_app(environ, start_response)
+ 
+    def __repr__(self):
+        return '<%s %r>' % (
+            self.__class__.__name__,
+            self.name,
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 2295, in wsgi_app
+            try:
+                ctx.push()
+                response = self.full_dispatch_request()
+            except Exception as e:
+                error = e
+                response = self.handle_exception(e)
+            except:
+                error = sys.exc_info()[1]
+                raise
+            return response(environ, start_response)
+        finally:
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 1741, in handle_exception
+            # if we want to repropagate the exception, we can attempt to
+            # raise it with the whole traceback in case we can do that
+            # (the function was actually called from the except part)
+            # otherwise, we just raise the error again
+            if exc_value is e:
+                reraise(exc_type, exc_value, tb)
+            else:
+                raise e
+ 
+        self.log_exception((exc_type, exc_value, tb))
+        if handler is None:
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 2292, in wsgi_app
+        ctx = self.request_context(environ)
+        error = None
+        try:
+            try:
+                ctx.push()
+                response = self.full_dispatch_request()
+            except Exception as e:
+                error = e
+                response = self.handle_exception(e)
+            except:
+                error = sys.exc_info()[1]
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 1815, in full_dispatch_request
+            request_started.send(self)
+            rv = self.preprocess_request()
+            if rv is None:
+                rv = self.dispatch_request()
+        except Exception as e:
+            rv = self.handle_user_exception(e)
+        return self.finalize_request(rv)
+ 
+    def finalize_request(self, rv, from_error_handler=False):
+        """Given the return value from a view function this finalizes
+        the request by converting it into a response and invoking the
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 1718, in handle_user_exception
+            return self.handle_http_exception(e)
+ 
+        handler = self._find_error_handler(e)
+ 
+        if handler is None:
+            reraise(exc_type, exc_value, tb)
+        return handler(e)
+ 
+    def handle_exception(self, e):
+        """Default exception handling that kicks in when an exception
+        occurs that is not caught.  In debug mode the exception will
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 1813, in full_dispatch_request
+        self.try_trigger_before_first_request_functions()
+        try:
+            request_started.send(self)
+            rv = self.preprocess_request()
+            if rv is None:
+                rv = self.dispatch_request()
+        except Exception as e:
+            rv = self.handle_user_exception(e)
+        return self.finalize_request(rv)
+ 
+    def finalize_request(self, rv, from_error_handler=False):
+File "/usr/lib/python2.7/site-packages/flask/app.py", line 1799, in dispatch_request
+        # request came with the OPTIONS method, reply automatically
+        if getattr(rule, 'provide_automatic_options', False) \
+           and req.method == 'OPTIONS':
+            return self.make_default_options_response()
+        # otherwise dispatch to the handler for that endpoint
+        return self.view_functions[rule.endpoint](**req.view_args)
+ 
+    def full_dispatch_request(self):
+        """Dispatches the request and on top of that performs request
+        pre and postprocessing as well as HTTP exception catching and
+        error handling.
+File "/cygdrive/c/Pred/oauth/project.py", line 60, in gconnect
+ 
+    try:
+        # Upgrade the authorization code into a credentials object
+        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow.redirect_uri = 'postmessage'
+        credentials = oauth_flow.step2_exchange(code)
+    except FlowExchangeError:
+        response = make_response(
+            json.dumps('Failed to upgrade the authorization code.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+                               plural=plural_s))
+                if positional_parameters_enforcement == POSITIONAL_EXCEPTION:
+                    raise TypeError(message)
+                elif positional_parameters_enforcement == POSITIONAL_WARNING:
+                    logger.warning(message)
+            return wrapped(*args, **kwargs)
+        return positional_wrapper
+ 
+    if isinstance(max_positional_args, six.integer_types):
+        return positional_decorator
+    else:
+File "/usr/lib/python2.7/site-packages/oauth2client/client.py", line 2054, in step2_exchange
+ 
+        if http is None:
+            http = transport.get_http_object()
+ 
+        resp, content = transport.request(
+            http, self.token_uri, method='POST', body=body, headers=headers)
+        d = _parse_exchange_token_response(content)
+        if resp.status == http_client.OK and 'access_token' in d:
+            access_token = d['access_token']
+            refresh_token = d.get('refresh_token', None)
+            if not refresh_token:
+File "/usr/lib/python2.7/site-packages/oauth2client/transport.py", line 282, in request
+    """
+    # NOTE: Allowing http or http.request is temporary (See Issue 601).
+    http_callable = getattr(http, 'request', http)
+    return http_callable(uri, method=method, body=body, headers=headers,
+                         redirections=redirections,
+                         connection_type=connection_type)
+ 
+ 
+_CACHED_HTTP = httplib2.Http(MemoryCache())
+File "/usr/lib/python2.7/site-packages/httplib2/__init__.py", line 1694, in request
+                if 'only-if-cached' in cc:
+                    info['status'] = '504'
+                    response = Response(info)
+                    content = ""
+                else:
+                    (response, content) = self._request(conn, authority, uri, request_uri, method, body, headers, redirections, cachekey)
+        except Exception as e:
+            if self.force_exception_to_status_code:
+                if isinstance(e, HttpLib2ErrorWithResponse):
+                    response = e.response
+                    content = e.content
+File "/usr/lib/python2.7/site-packages/httplib2/__init__.py", line 1434, in _request
+        auths = [(auth.depth(request_uri), auth) for auth in self.authorizations if auth.inscope(host, request_uri)]
+        auth = auths and sorted(auths)[0][1] or None
+        if auth:
+            auth.request(method, request_uri, headers, body)
+ 
+        (response, content) = self._conn_request(conn, request_uri, method, body, headers)
+ 
+        if auth:
+            if auth.response(response, body):
+                auth.request(method, request_uri, headers, body)
+                (response, content) = self._conn_request(conn, request_uri, method, body, headers )
+File "/usr/lib/python2.7/site-packages/httplib2/__init__.py", line 1354, in _conn_request
+        seen_bad_status_line = False
+        while i < RETRIES:
+            i += 1
+            try:
+                if hasattr(conn, 'sock') and conn.sock is None:
+                    conn.connect()
+                conn.request(method, request_uri, body, headers)
+            except socket.timeout:
+                raise
+            except socket.gaierror:
+                conn.close()
+File "/usr/lib/python2.7/site-packages/httplib2/__init__.py", line 1104, in connect
+                else:
+                    sock.connect(sockaddr)
+                self.sock =_ssl_wrap_socket(
+                    sock, self.key_file, self.cert_file,
+                    self.disable_ssl_certificate_validation, self.ca_certs,
+                    self.ssl_version, self.host)
+                if self.debuglevel > 0:
+                    print("connect: (%s, %s)" % (self.host, self.port))
+                    if use_proxy:
+                        print("proxy: %s" % str((proxy_host, proxy_port, proxy_rdns, proxy_user, proxy_pass, proxy_headers)))
+                if not self.disable_ssl_certificate_validation:
+File "/usr/lib/python2.7/site-packages/httplib2/__init__.py", line 97, in _ssl_wrap_socket
+        context.check_hostname = (cert_reqs != ssl.CERT_NONE)
+        if cert_file:
+            context.load_cert_chain(cert_file, key_file)
+        if ca_certs:
+            context.load_verify_locations(ca_certs)
+        return context.wrap_socket(sock, server_hostname=hostname)
+    else:
+        return ssl.wrap_socket(sock, keyfile=key_file, certfile=cert_file,
+                               cert_reqs=cert_reqs, ca_certs=ca_certs,
+                               ssl_version=ssl_version)
+ 
+File "/usr/lib/python2.7/ssl.py", line 363, in wrap_socket
+                    server_hostname=None):
+        return SSLSocket(sock=sock, server_side=server_side,
+                         do_handshake_on_connect=do_handshake_on_connect,
+                         suppress_ragged_eofs=suppress_ragged_eofs,
+                         server_hostname=server_hostname,
+                         _context=self)
+ 
+    def set_npn_protocols(self, npn_protocols):
+        protos = bytearray()
+        for protocol in npn_protocols:
+            b = protocol.encode('ascii')
+File "/usr/lib/python2.7/ssl.py", line 611, in __init__
+                if do_handshake_on_connect:
+                    timeout = self.gettimeout()
+                    if timeout == 0.0:
+                        # non-blocking
+                        raise ValueError("do_handshake_on_connect should not be specified for non-blocking sockets")
+                    self.do_handshake()
+ 
+            except (OSError, ValueError):
+                self.close()
+                raise
+ 
+File "/usr/lib/python2.7/ssl.py", line 840, in do_handshake
+        self._check_connected()
+        timeout = self.gettimeout()
+        try:
+            if timeout == 0.0 and block:
+                self.settimeout(None)
+            self._sslobj.do_handshake()
+        finally:
+            self.settimeout(timeout)
+ 
+        if self.context.check_hostname:
+            if not self.server_hostname:
+SSLEOFError: EOF occurred in violation of protocol (_ssl.c:661)
